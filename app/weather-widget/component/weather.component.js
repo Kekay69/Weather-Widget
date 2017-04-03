@@ -13,7 +13,16 @@ var weather_service_1 = require('../service/weather.service');
 var WeatherComponent = (function () {
     function WeatherComponent(service) {
         this.service = service;
+        // this.service.getCurrentLocation();
+        //this.pos = this.service.getCurrentLocation();  ---"this method returns an error" therefore do the below one---
+        this.pos = [0, 0]; // prove that this methd works. Then replace as below
         this.service.getCurrentLocation();
+        // this.service.getCurrentWeather(0, 0)  // -- Replace code as below
+        // this.service.getCurrentWeather(this.pos[0], this.pos[1])  //--- Replace code as below
+        this.service.getCurrentWeather(0, 0)
+            .subscribe(function (weather) { return console.log(weather); }, // this is an observable
+        function (// this is an observable
+            err) { return console.error(err); }); // "shift + alt" to indent lines of code
         // --- Do not do this ---
         //    service: WeatherService;  
         //    constructor() {
@@ -25,7 +34,7 @@ var WeatherComponent = (function () {
             moduleId: module.id,
             selector: 'weather-widget',
             templateUrl: 'weather.component.html',
-            styleUrls: ['weather.compoent.css'],
+            styleUrls: ['weather.component.css'],
             providers: [weather_service_1.WeatherService]
         }), 
         __metadata('design:paramtypes', [weather_service_1.WeatherService])
