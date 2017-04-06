@@ -15,9 +15,11 @@ require('rxjs/add/operator/map');
 require('rxjs/add/operator/catch');
 var constants_1 = require('../constants/constants');
 var WeatherService = (function () {
-    function WeatherService(jsonp) {
+    //constructor(private jsonp: Jsonp) { }   // --- adding a constructor 2017/03/31 constructor(private jsonp: Jsonp) { }   // --- adding a constructor 2017/03/31 ------
+    function WeatherService(jsonp, http) {
         this.jsonp = jsonp;
-    } // --- adding a constructor 2017/03/31 ---
+        this.http = http;
+    } // --- adding Http 2017/04/04 constructor(private jsonp: Jsonp, private http: Http) { }   // --- adding a constructor 2017/03/31 ------
     //getCurrentLocation(): [number,number] {  // --- Replace as below
     WeatherService.prototype.getCurrentLocation = function () {
         if (navigator.geolocation) {
@@ -58,9 +60,20 @@ var WeatherService = (function () {
             return Observable_1.Observable.throw(err.json());
         });
     };
+    // Adding a Method
+    WeatherService.prototype.getLocationName = function (lat, long) {
+        var url = constants_1.GOOGLE_ROOT;
+        var queryParams = "?latlng=" + lat + "," + long + "&key" + constants_1.GOOGLE_KEY;
+        return this.http.get(url + queryParams)
+            .map(function (loc) { return loc.json(); })
+            .catch(function (err) {
+            console.error("Unable to get location - ", err);
+            return Observable_1.Observable.throw(err);
+        });
+    };
     WeatherService = __decorate([
         core_1.Injectable(), 
-        __metadata('design:paramtypes', [http_1.Jsonp])
+        __metadata('design:paramtypes', [http_1.Jsonp, http_1.Http])
     ], WeatherService);
     return WeatherService;
 }());

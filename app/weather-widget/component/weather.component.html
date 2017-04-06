@@ -1,24 +1,58 @@
-<div class="card">    
-    <div class="card-header">
-        <div class="col-xs-8">
-            <p>Leeds, UK</p>
+<div class="card" (click)="toggleUnits()" [ngStyle]="setStyles()">
+    <!-- [ngStyles] added on 2017-04-05 after defined in weather.component.ts  -->
+    <div class="card-header" [class.invisible]="!dataReceived">
+        <!-- [class.invisible] <=(bootstrap class) added a new component property on 2017-04-05 for weather.component.ts(1) -->
+        <div class="col-xs-8" id="location-wrapper">
+            <!--p>Leeds, UK</p-->
+                <!-- 2017-04-06 - Added map=marker for final tweeks  --> 
+            <p><i id="location-icon" class="fa fa-map-marker" aria-hidden="true"></i>{{ currentLocation }}</p>
+            <!-- Interpolation sytax -->
         </div>
         <div class="col-xs-4 text-xs-right">
-            <h1>3&deg;</h1>
+            <!--h1>3&deg;</h1>
+            <h1>{{ weatherData.temp | number: '.0-0' }}&deg;</h1-->
+            <h1>{{ weatherData.temp | tempUnit: currentTempUnit | number: '.0-0' }}&deg;</h1>
         </div>
     </div>
     <div class="card-block">
-        <h1>0</h1>
-        <p>Rain</p>
+        <div id="indicator" [hidden]="dataReceived">
+            <i class="fa fa-circle-o-notch fa-spin fa-4x fa-fw"></i>
+            <span class="sr-only">Loading...</span>
+        </div>
+        <!--h1>0</h1-->
+        <canvas id="icon" [hidden]="!dataReceived"></canvas>
+        <!-- Added on 2017-04-04 -->
+        <!--p>Rain</p-->
+        <p>{{ weatherData.summary }}</p>
     </div>
-    <div class="card-footer">
+    <div class="card-footer" [class.invisible]="!dataReceived">
+        <!-- replaced on 2017-04-06 -->
+        <div class="row" id="detail-row">
+            <div class="col-xs-5">
+                <p>Wind</p>
+                <p class="unit-label">{{ weatherData.wind | speedUnit: currentSpeedUnit }}</p>
+            </div>
+            <div class="col-xs-5 offset-xs-2">
+                <p>Humidity</p>
+                <p>{{ weatherData.humidity | percent }}</p>
+            </div>
+        </div>
+        <div class="row" id="helper-row">
+            <small class="text-muted">click to switch between &deg;f/kph and &deg;c/mph</small>
+        </div>
+    </div>
+    <!-- *** Modified on 2017-04-06 *** 
+    <div class="card-footer" [class.invisible]="!dataReceived">
+        <!-- [class.invisible] <=(bootstrap class) added a new component property on 2017-04-05 for weather.component.ts(1a) ->
         <div class="col-xs-5">
             <p>Wind</p>
-            <p>14mph</p>
+            <!--p>14mph</p->
+            <p>{{ weatherData.wind | speedUnit: currentSpeedUnit }}</p>
         </div>
         <div class="col-xs-5 offset-xs-2">
             <p>Humidity</p>
-            <p>80%</p>
+            <!--p>80%</p->
+            <p>{{ weatherData.humidity | percent }}</p>
         </div>
-    </div>
+    </div-->
 </div>
